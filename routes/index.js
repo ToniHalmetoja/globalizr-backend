@@ -14,10 +14,8 @@ router.post('/ping', function(req, res){
 })
 
 router.post('/add', function(req, res){
-  console.log(req.body)
 
   let column = `experiences.${req.body.country}.${req.body.type}`;
-  // let person = {"country":req.body.country, [req.body.date, req.body.name]
   
   if(req.body.type=="persons"){
   
@@ -27,7 +25,10 @@ router.post('/add', function(req, res){
         $push: {
           [column]: {name: `${req.body.name}`, date: `${req.body.date}` }
         }
-      },{upsert:true}
+      },{upsert:true}, function(err){
+        if (err) throw err;
+        else {res.send("OK!")}
+      }
     );
   }
   else if(req.body.type=="visits"){
@@ -38,7 +39,10 @@ router.post('/add', function(req, res){
         $push: {
           [column]: {name: `${req.body.name}`, date: `${req.body.date}` }
         }
-      },{upsert:true}
+      },{upsert:true}, function(err){
+        if (err) throw err;
+        else {res.send("OK!")}
+      }
     );
   }
   else if(req.body.type=="books"){
@@ -49,7 +53,10 @@ router.post('/add', function(req, res){
         $push: {
           [column]: {title: `${req.body.title}`, author: `${req.body.author}`, date: `${req.body.date}` }
         }
-      },{upsert:true}
+      },{upsert:true}, function(err){
+        if (err) throw err;
+        else {res.send("OK!")}
+      }
     );
   }
   else if(req.body.type=="dishes"){
@@ -60,7 +67,10 @@ router.post('/add', function(req, res){
         $push: {
           [column]: {name: `${req.body.name}`, recipe: `${req.body.recipe}`, date: `${req.body.date}` }
         }
-      },{upsert:true}
+      },{upsert:true}, function(err){
+        if (err) throw err;
+        else {res.send("OK!")}
+      }
     );
   }
 
