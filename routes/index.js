@@ -13,6 +13,64 @@ router.post('/ping', function(req, res){
   res.send("pong");
 })
 
+router.post('/add', function(req, res){
+  console.log(req.body)
+
+  let column = `experiences.${req.body.country}.${req.body.type}`;
+  // let person = {"country":req.body.country, [req.body.date, req.body.name]
+  
+  if(req.body.type=="persons"){
+  
+    req.app.locals.db.collection("experiences").updateOne(
+      { userid: req.body.user },
+      {
+        $push: {
+          [column]: {name: `${req.body.name}`, date: `${req.body.date}` }
+        }
+      },{upsert:true}
+    );
+  }
+  else if(req.body.type=="visits"){
+  
+    req.app.locals.db.collection("experiences").updateOne(
+      { userid: req.body.user },
+      {
+        $push: {
+          [column]: {name: `${req.body.name}`, date: `${req.body.date}` }
+        }
+      },{upsert:true}
+    );
+  }
+  else if(req.body.type=="books"){
+  
+    req.app.locals.db.collection("experiences").updateOne(
+      { userid: req.body.user },
+      {
+        $push: {
+          [column]: {title: `${req.body.title}`, author: `${req.body.author}`, date: `${req.body.date}` }
+        }
+      },{upsert:true}
+    );
+  }
+  else if(req.body.type=="dishes"){
+  
+    req.app.locals.db.collection("experiences").updateOne(
+      { userid: req.body.user },
+      {
+        $push: {
+          [column]: {name: `${req.body.name}`, recipe: `${req.body.recipe}`, date: `${req.body.date}` }
+        }
+      },{upsert:true}
+    );
+  }
+
+
+})  
+
+
+
+
+
 router.post('/login', function(req, res){
 
   let attemptUser = req.body;
