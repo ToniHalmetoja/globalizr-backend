@@ -13,6 +13,25 @@ router.post('/ping', function(req, res){
   res.send("pong");
 })
 
+router.post('/getall', function(req, res){
+
+  req.app.locals.db.collection("experiences").find({ userid: req.body.user }, { projection: {  _id: 0, experiences: 1 } }).toArray(function(err, result) {
+    if (err) throw err;
+    else {res.send(result)}
+  });
+})
+
+router.post('/getone', function(req, res){
+  let country = req.body.country;
+  console.log(req.body);
+  req.app.locals.db.collection("experiences").find({ userid: req.body.user}, {projection: {_id:0, [`experiences.${country}`]:1} }).toArray(function(err, result) {
+    console.log(result);
+    if (err) throw err;
+    else {res.send(result)}
+  });
+
+})
+
 router.post('/add', function(req, res){
 
   let column = `experiences.${req.body.country}.${req.body.type}`;
