@@ -23,9 +23,8 @@ router.post('/getall', function(req, res){
 
 router.post('/getone', function(req, res){
   let country = req.body.country;
-  console.log(req.body);
   req.app.locals.db.collection("experiences").find({ userid: req.body.user}, {projection: {_id:0, [`experiences.${country}`]:1} }).toArray(function(err, result) {
-    console.log(result);
+    console.log(result)
     if (err) throw err;
     else {res.send(result)}
   });
@@ -103,8 +102,6 @@ router.post('/add', function(req, res){
 router.post('/login', function(req, res){
 
   let attemptUser = req.body;
-
-  console.log(attemptUser)
 
   req.app.locals.db.collection("login").find({"username": attemptUser.userName}).toArray()
   .then(results => {
