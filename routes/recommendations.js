@@ -1,13 +1,21 @@
 var express = require('express');
 var router = express.Router();
+const axios = require("axios");
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+
+router.post('/getdish', function(req, res, next) {
+  const dishes = async () => {
+    try {
+        const response = await axios.get(`https://api.spoonacular.com/recipes/random?apiKey=${process.env.SPOON_KEY}&number=1&tags=${country}`)
+          res.json(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+  const country = req.body.cuisine.toLowerCase();
+  dishes();
+
 });
-
-router.post('/ping', function(req, res){
-  res.send("pong");
-})
 
 module.exports = router;
