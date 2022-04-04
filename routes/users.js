@@ -8,20 +8,19 @@ router.post('/login', function(req, res){
 
     let attemptUser = req.body;
   
-    req.app.locals.db.collection("login").find({"username": attemptUser.userName}).toArray()
+    req.app.locals.db.collection("login").find({"userName": attemptUser.userName}).toArray()
     .then(results => {
-      console.log(results);
       let user = results;
   
       if(user == false){
         res.status(403).send("Invalid username!");
       }
   
-      else if(user[0].username == attemptUser.userName){
+      else if(user[0].userName == attemptUser.userName){
           let decryptedPass = CryptoJS.AES.decrypt(user[0].password,process.env.SALT_KEY).toString(CryptoJS.enc.Utf8);
           if(decryptedPass == attemptUser.password){
-            let loggedIn = {id:user[0].userid};
-            res.send(JSON.stringify(loggedIn));
+            let loggedIn = {id:user[0].id};
+            res.send(loggedIn);
           }
           else if(decryptedPass != attemptUser.password){
             res.status(403).send("Invalid username or password!");
@@ -34,7 +33,7 @@ router.post('/login', function(req, res){
   router.post('/register', function(req, res){
     let newReg = req.body;
 
-    req.app.locals.db.collection("login").find({"username": newReg.userName}).toArray()
+    req.app.locals.db.collection("login").find({"userName": newReg.userName}).toArray()
     .then(result => {
       if(result == false){
         newReg.id = rand.generateDigits(10);
