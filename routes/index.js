@@ -13,8 +13,7 @@ router.post('/getall', function(req, res){
 
 router.post('/getone', function(req, res){
   let country = req.body.country;
-  req.app.locals.db.collection("experiences").find({ userid: req.body.user}, {projection: {_id:0, [`experiences.${country}`]:1} }).toArray(function(err, result) {
-    console.log(result)
+  req.app.locals.db.collection("experiences").find({ userid: req.body.user}, {projection: {[`experiences.${country}`]:1} }).toArray(function(err, result) {
     if (err) throw err;
     else {res.send(result)}
   });
@@ -81,9 +80,34 @@ router.post('/add', function(req, res){
       }
     );
   }
-
-
 })  
+
+router.post('/delete', function(req, res){
+
+  let column = `experiences.${req.body.country}.${req.body.type}`;
+  let data;
+
+  if(req.body.toDelete.type === "books"){
+    data = req.body.toDelete.title;
+  }
+  else{
+    data = req.body.toDelete.name;
+  }
+
+  req.app.locals.db.collection("experiences").updateOne(
+    { userid: req.body.id },
+  { $pull: { 
+      [column]: { name: [data] } 
+    }
+  }
+  )
+
+  req.app.locals.db.collection("experiences").updateOne(
+    { userid: req.body.id },
+    {$unset : {[column] : { $size : 0 }}}
+)
+
+})
 
 
 
