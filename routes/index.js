@@ -94,18 +94,18 @@ router.post('/delete', function(req, res){
     data = req.body.toDelete.name;
   }
 
+  console.log(column)
+  console.log(data)
+
   req.app.locals.db.collection("experiences").updateOne(
     { userid: req.body.id },
   { $pull: { 
-      [column]: { name: [data] } 
+      [column]: { name: data } 
     }
   }
   )
 
-  req.app.locals.db.collection("experiences").updateOne(
-    { userid: req.body.id },
-    {$unset : {[column] : { $size : 0 }}}
-)
+  res.send("OK!")
 
 })
 
